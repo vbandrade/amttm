@@ -13,18 +13,34 @@ class Home extends StatelessWidget {
         children: <Widget>[
           Text("who's talking?"),
           Text("%"),
-          Row(
-            children: <Widget>[
-              TimeCounter("a dude"),
-              TimeCounter("not a dude"),
-            ],
-          )
+          TimerCounterPanel(["a dude", "not a dude"]),
         ],
       ),
     );
   }
+}
 
-  
+class TimerCounterPanel extends StatefulWidget {
+  List<String> _labels;
+
+  TimerCounterPanel(this._labels);
+
+  @override
+  _TimerCounterPanelState createState() => _TimerCounterPanelState();
+}
+
+class _TimerCounterPanelState extends State<TimerCounterPanel> {
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> timers = widget._labels
+        .map((label) => TimeCounter(label))
+        .cast<Widget>()
+        .toList();
+
+    return Row(
+      children: timers,
+    );
+  }
 }
 
 class TimeCounter extends StatefulWidget {
@@ -39,35 +55,46 @@ class TimeCounter extends StatefulWidget {
 
 class _TimeCounterState extends State<TimeCounter> {
   Duration _elapsedTime = Duration();
+  Timer _timer;
 
   void refreshTimerCallback(Timer timer) {
-    setState(() {
-      if (_elapsedTime == widget._stopwatch.elapsed) timer.cancel();
-      _elapsedTime = widget._stopwatch.elapsed;
-      debugPrint(_elapsedTime.inSeconds.toString());
-    });
+    if (_elapsedTime == widget._stopwatch.elapsed) {
+      timer.cancel();
+    } else {
+      setState(() {
+        _elapsedTime = widget._stopwatch.elapsed;
+        debugPrint(_elapsedTime.inSeconds.toString());
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final int minutes = _elapsedTime.inMinutes;
+    final int seconds = _elapsedTime.inSeconds - (minutes * 60);
     return Column(
       children: <Widget>[
         RaisedButton(
           child: Text(widget._label),
           onPressed: (!widget._stopwatch.isRunning) ? _onPressed : null,
         ),
-        Text("${_elapsedTime.inSeconds}"),
+        Text("$minutes:$seconds"),
       ],
     );
   }
 
   void _onPressed() {
     widget._stopwatch.start();
-    Timer.periodic(Duration(seconds: 1), refreshTimerCallback);
+    _timer = Timer.periodic(Duration(milliseconds: 400), refreshTimerCallback);
     debugPrint(widget._label);
   }
 
   void stopTimer() {
     widget._stopwatch.stop();
+  }
+
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 }
