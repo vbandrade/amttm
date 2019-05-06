@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 typedef OnPressedCallback = void Function(String label);
 
@@ -17,6 +18,7 @@ class TimeCounter extends StatefulWidget {
 class _TimeCounterState extends State<TimeCounter> {
   Duration _elapsedTime = Duration();
   Timer _timer;
+  NumberFormat formater = NumberFormat("00");
 
   void refreshTimerCallback(Timer timer) {
     if (_elapsedTime == widget._stopwatch.elapsed) {
@@ -30,15 +32,15 @@ class _TimeCounterState extends State<TimeCounter> {
 
   @override
   Widget build(BuildContext context) {
-    final int minutes = _elapsedTime.inMinutes;
-    final int seconds = _elapsedTime.inSeconds - (minutes * 60);
+    final int minutes = _elapsedTime.inMinutes ?? 0;
+    final int seconds = (_elapsedTime.inSeconds ?? 0) - (minutes * 60);
     return Column(
       children: <Widget>[
         RaisedButton(
           child: Text(widget._label),
           onPressed: (!widget._stopwatch.isRunning) ? _onPressed : null,
         ),
-        Text("$minutes:$seconds"),
+        Text("${formater.format(minutes)}:${formater.format(seconds)}"),
       ],
     );
   }
