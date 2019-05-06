@@ -44,7 +44,7 @@ class TimerCounterPanel extends StatefulWidget {
 }
 
 class _TimerCounterPanelState extends State<TimerCounterPanel> {
-  int _percentage = 0;
+  int _percentage = 100;
   bool _displayPercentage = false;
   Timer _timer;
 
@@ -90,10 +90,10 @@ class _TimerCounterPanelState extends State<TimerCounterPanel> {
   void calculatePercentage() {
     final menSW = widget._timerTable["a dude"];
     final notMenSW = widget._timerTable["not a dude"];
-    _displayPercentage = notMenSW.elapsed.inSeconds != 0;
+    _displayPercentage = notMenSW.isRunning || menSW.isRunning;
     if (_displayPercentage) {
-      _percentage = ((menSW.elapsed.inSeconds /
-                  (menSW.elapsed.inSeconds + notMenSW.elapsed.inSeconds)) *
+      _percentage = ((menSW.elapsedMilliseconds /
+                  (menSW.elapsedMilliseconds + notMenSW.elapsedMilliseconds)) *
               100)
           .toInt();
       debugPrint(_percentage.toString());
