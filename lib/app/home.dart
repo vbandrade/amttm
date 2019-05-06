@@ -9,6 +9,7 @@ class Home extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Are men talking too much?'),
+        backgroundColor: Colors.deepOrange[200],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
