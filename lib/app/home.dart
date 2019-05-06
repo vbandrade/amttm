@@ -49,12 +49,12 @@ class _TimerCounterPanelState extends State<TimerCounterPanel> {
   Timer _timer;
 
   _TimerCounterPanelState() {
-    _timer = Timer.periodic(Duration(seconds: 1), refreshTimerCallback);
+    _timer = Timer.periodic(Duration(seconds: 1), _refreshTimerCallback);
   }
 
   @override
   Widget build(BuildContext context) {
-    calculatePercentage();
+    _calculatePercentage();
     List<TimeCounter> timers = widget._labels
         .map((label) => TimeCounter(
               label,
@@ -77,17 +77,22 @@ class _TimerCounterPanelState extends State<TimerCounterPanel> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: timers,
         ),
+        FlatButton.icon(
+          icon: Icon(Icons.refresh),
+          label: Text("reset"),
+          onPressed: _displayPercentage ? _reset : null,
+        )
       ],
     );
   }
 
-  void refreshTimerCallback(Timer timer) {
+  void _refreshTimerCallback(Timer timer) {
     setState(() {
-      calculatePercentage();
+      _calculatePercentage();
     });
   }
 
-  void calculatePercentage() {
+  void _calculatePercentage() {
     final menSW = widget._timerTable["a dude"];
     final notMenSW = widget._timerTable["not a dude"];
     _displayPercentage = notMenSW.isRunning || menSW.isRunning;
@@ -96,8 +101,10 @@ class _TimerCounterPanelState extends State<TimerCounterPanel> {
                   (menSW.elapsedMilliseconds + notMenSW.elapsedMilliseconds)) *
               100)
           .toInt();
-      debugPrint(_percentage.toString());
+    } else {
+      _percentage = 100;
     }
+    debugPrint(_percentage.toString());
   }
 
   void _onPressed(String label) {
@@ -105,7 +112,14 @@ class _TimerCounterPanelState extends State<TimerCounterPanel> {
       sw.stop();
     });
     setState(() {
-      calculatePercentage();
+      _calculatePercentage();
+    });
+  }
+
+  void _reset() {
+    widget._timerTable.forEach((String s, Stopwatch sw) {
+      sw.stop();
+      sw.reset();
     });
   }
 
