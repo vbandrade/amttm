@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
+typedef OnPressedCallback = void Function(String label);
+
 class TimeCounter extends StatefulWidget {
-  final Stopwatch _stopwatch = Stopwatch();
+  final Stopwatch _stopwatch;
   final String _label;
+  final OnPressedCallback _onPressed;
 
   @override
   _TimeCounterState createState() => _TimeCounterState();
 
-  TimeCounter(this._label);
+  TimeCounter(this._label, this._stopwatch, this._onPressed);
 }
 
 class _TimeCounterState extends State<TimeCounter> {
@@ -21,7 +24,6 @@ class _TimeCounterState extends State<TimeCounter> {
     } else {
       setState(() {
         _elapsedTime = widget._stopwatch.elapsed;
-        debugPrint(_elapsedTime.inSeconds.toString());
       });
     }
   }
@@ -42,13 +44,9 @@ class _TimeCounterState extends State<TimeCounter> {
   }
 
   void _onPressed() {
+    widget._onPressed(widget._label);
     widget._stopwatch.start();
     _timer = Timer.periodic(Duration(milliseconds: 400), refreshTimerCallback);
-    debugPrint(widget._label);
-  }
-
-  void stopTimer() {
-    widget._stopwatch.stop();
   }
 
   void dispose() {
