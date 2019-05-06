@@ -8,7 +8,7 @@ class Home extends StatelessWidget {
     final style = TextStyle(fontSize: 24);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Are men talking too much?'),
+        title: Text('are men talking too much?'),
         backgroundColor: Colors.deepOrange[200],
       ),
       body: Column(
@@ -20,7 +20,7 @@ class Home extends StatelessWidget {
           ),
           TimerCounterPanel(["a dude", "not a dude"]),
           FlatButton(
-            child: Text("Inspired by:\nhttp://arementalkingtoomuch.com"),
+            child: Text("inspired by:\nhttp://arementalkingtoomuch.com"),
             onPressed: _launchURL,
           )
         ],
@@ -33,7 +33,7 @@ class Home extends StatelessWidget {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      throw 'Could not launch $url';
+      throw 'could not launch $url';
     }
   }
 }
