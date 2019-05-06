@@ -17,6 +17,10 @@ class Home extends StatelessWidget {
             style: style,
           ),
           TimerCounterPanel(["a dude", "not a dude"]),
+          FlatButton(
+            child: Text("Inspired by:\nhttp://arementalkingtoomuch.com/"),
+            onPressed: () {},
+          )
         ],
       ),
     );
