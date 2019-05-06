@@ -6,13 +6,18 @@ import 'package:amttm/app/time_counter.dart';
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final style = TextStyle(fontSize: 24);
     return Scaffold(
       appBar: AppBar(
         title: Text('Are men talking too much?'),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          Text("who's talking?"),
+          Text(
+            "who's talking?",
+            style: style,
+          ),
           TimerCounterPanel(["a dude", "not a dude"]),
         ],
       ),
@@ -58,10 +63,18 @@ class _TimerCounterPanelState extends State<TimerCounterPanel> {
             ))
         .toList();
 
+    final style = TextStyle(fontSize: 24);
+
     return Column(
       children: <Widget>[
-        _displayPercentage ? Text("$_percentage%men") : Text(""),
+        Container(
+          child: _displayPercentage
+              ? Text("$_percentage% men", style: style)
+              : Text("", style: style),
+          margin: EdgeInsets.only(bottom: 20),
+        ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: timers,
         ),
       ],
