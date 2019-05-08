@@ -9,6 +9,7 @@
 .history
 .svn/
 key.jks
+key.properties
 
 # IntelliJ related
 *.iml
