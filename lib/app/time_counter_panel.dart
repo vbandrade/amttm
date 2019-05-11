@@ -55,6 +55,11 @@ class _TimerCounterPanelState extends State<TimerCounterPanel> {
           children: timers,
         ),
         FlatButton.icon(
+          icon: Icon(Icons.stop),
+          label: Text("stop"),
+          onPressed: _displayPercentage ? _stop : null,
+        ),
+        FlatButton.icon(
           icon: Icon(Icons.refresh),
           label: Text("reset"),
           onPressed: _displayPercentage ? _reset : null,
@@ -96,6 +101,12 @@ class _TimerCounterPanelState extends State<TimerCounterPanel> {
     widget._timerTable.forEach((String s, Stopwatch sw) {
       sw.stop();
       sw.reset();
+    });
+  }
+
+  void _stop() {
+    widget._timerTable.forEach((String s, Stopwatch sw) {
+      sw.stop();
     });
   }
 
