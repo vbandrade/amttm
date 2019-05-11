@@ -18,7 +18,7 @@ class Home extends StatelessWidget {
             "who's talking?",
             style: style,
           ),
-          TimerCounterPanel(["a dude", "not a dude"]),
+          TimeCounterPanel(["a dude", "not a dude"]),
           FlatButton(
             child: Text("inspired by:\nhttp://arementalkingtoomuch.com"),
             onPressed: _launchURL,

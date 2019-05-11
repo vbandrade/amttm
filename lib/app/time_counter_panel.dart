@@ -2,11 +2,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:amttm/app/time_counter.dart';
 
-class TimerCounterPanel extends StatefulWidget {
+class TimeCounterPanel extends StatefulWidget {
   final List<String> _labels;
   final Map<String, Stopwatch> _timerTable;
 
-  TimerCounterPanel(this._labels)
+  TimeCounterPanel(this._labels)
       : _timerTable = _labels.fold<Map<String, Stopwatch>>(
             Map<String, Stopwatch>(), combine);
 
@@ -17,15 +17,15 @@ class TimerCounterPanel extends StatefulWidget {
   }
 
   @override
-  _TimerCounterPanelState createState() => _TimerCounterPanelState();
+  _TimeCounterPanelState createState() => _TimeCounterPanelState();
 }
 
-class _TimerCounterPanelState extends State<TimerCounterPanel> {
+class _TimeCounterPanelState extends State<TimeCounterPanel> {
   int _percentage = 100;
   bool _displayPercentage = false;
   Timer _timer;
 
-  _TimerCounterPanelState() {
+  _TimeCounterPanelState() {
     _timer = Timer.periodic(Duration(seconds: 1), _refreshTimerCallback);
   }
 
