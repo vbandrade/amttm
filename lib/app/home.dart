@@ -8,7 +8,7 @@ class Home extends StatelessWidget {
     final style = TextStyle(fontSize: 24);
     return Scaffold(
       appBar: AppBar(
-        title: Text('are men talking too much?'),
+        title: Text('🤐 are men talking too much?'),
         backgroundColor: Colors.deepOrange[200],
       ),
       body: Column(
