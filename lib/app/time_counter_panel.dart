@@ -81,7 +81,6 @@ class _TimerCounterPanelState extends State<TimerCounterPanel> {
     } else {
       _percentage = 100;
     }
-    debugPrint(_percentage.toString());
   }
 
   void _onPressed(String label) {
