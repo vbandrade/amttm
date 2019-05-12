@@ -1,42 +1,21 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:amttm/app/time_counter.dart';
+import 'package:amttm/app/time_counter_bloc.dart';
 
-class TimeCounterPanel extends StatefulWidget {
+class TimeCounterPanel extends StatelessWidget {
   final List<String> _labels;
-  final Map<String, Stopwatch> _timerTable;
 
-  TimeCounterPanel(this._labels)
-      : _timerTable = _labels.fold<Map<String, Stopwatch>>(
-            Map<String, Stopwatch>(), combine);
-
-  static Map<String, Stopwatch> combine(
-      Map<String, Stopwatch> previousValue, String element) {
-    previousValue[element] = Stopwatch();
-    return previousValue;
-  }
-
-  @override
-  _TimeCounterPanelState createState() => _TimeCounterPanelState();
-}
-
-class _TimeCounterPanelState extends State<TimeCounterPanel> {
-  int _percentage = 100;
-  bool _displayPercentage = false;
-  Timer _timer;
-
-  _TimeCounterPanelState() {
-    _timer = Timer.periodic(Duration(seconds: 1), _refreshTimerCallback);
-  }
+  TimeCounterPanel(this._labels);
 
   @override
   Widget build(BuildContext context) {
-    _calculatePercentage();
-    List<TimeCounter> timers = widget._labels
+    TimeCounterBloc _bloc = Provider.of<TimeCounterBloc>(context);
+    List<TimeCounter> timers = _labels
         .map((label) => TimeCounter(
               label,
-              widget._timerTable[label],
-              _onPressed,
+              _bloc.timerTable[label],
+              _bloc.start,
             ))
         .toList();
 
@@ -45,8 +24,8 @@ class _TimeCounterPanelState extends State<TimeCounterPanel> {
     return Column(
       children: <Widget>[
         Container(
-          child: _displayPercentage
-              ? Text("$_percentage% men", style: style)
+          child: _bloc.isCounting
+              ? Text("${_bloc.percentage}% men", style: style)
               : Text("", style: style),
           margin: EdgeInsets.only(bottom: 20),
         ),
@@ -57,61 +36,14 @@ class _TimeCounterPanelState extends State<TimeCounterPanel> {
         FlatButton.icon(
           icon: Icon(Icons.stop),
           label: Text("stop"),
-          onPressed: _displayPercentage ? _stop : null,
+          onPressed: _bloc.isCounting && !_bloc.isStopped ? _bloc.stop : null,
         ),
         FlatButton.icon(
           icon: Icon(Icons.refresh),
           label: Text("reset"),
-          onPressed: _displayPercentage ? _reset : null,
+          onPressed: _bloc.isCounting ? _bloc.reset : null,
         )
       ],
     );
-  }
-
-  void _refreshTimerCallback(Timer timer) {
-    setState(() {
-      _calculatePercentage();
-    });
-  }
-
-  void _calculatePercentage() {
-    final menSW = widget._timerTable["a dude"];
-    final notMenSW = widget._timerTable["not a dude"];
-    _displayPercentage = notMenSW.isRunning || menSW.isRunning;
-    if (_displayPercentage) {
-      _percentage = ((menSW.elapsedMilliseconds /
-                  (menSW.elapsedMilliseconds + notMenSW.elapsedMilliseconds)) *
-              100)
-          .toInt();
-    } else {
-      _percentage = 100;
-    }
-  }
-
-  void _onPressed(String label) {
-    widget._timerTable.forEach((String s, Stopwatch sw) {
-      sw.stop();
-    });
-    setState(() {
-      _calculatePercentage();
-    });
-  }
-
-  void _reset() {
-    widget._timerTable.forEach((String s, Stopwatch sw) {
-      sw.stop();
-      sw.reset();
-    });
-  }
-
-  void _stop() {
-    widget._timerTable.forEach((String s, Stopwatch sw) {
-      sw.stop();
-    });
-  }
-
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
   }
 }
