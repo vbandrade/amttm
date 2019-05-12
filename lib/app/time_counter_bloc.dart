@@ -34,6 +34,7 @@ class TimeCounterBloc with ChangeNotifier {
                   (menSW.elapsedMilliseconds + notMenSW.elapsedMilliseconds)) *
               100)
           .toInt();
+      if (notMenSW.elapsedMilliseconds == 0) percentage = 100;
     } else {
       percentage = 100;
     }
