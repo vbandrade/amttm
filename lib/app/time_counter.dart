@@ -12,7 +12,7 @@ class TimeCounter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    NumberFormat formater = NumberFormat("00");
+    final formater = NumberFormat("00", "BRL");
     final elapsedTime = _stopwatch.elapsed;
     final int minutes = elapsedTime.inMinutes ?? 0;
     final int seconds = (elapsedTime.inSeconds ?? 0) - (minutes * 60);
