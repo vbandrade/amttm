@@ -23,11 +23,13 @@ class TimeCounterPanel extends StatelessWidget {
 
     return Column(
       children: <Widget>[
-        Container(
-          child: _bloc.isCounting
-              ? Text("${_bloc.percentage}% men", style: style)
-              : Text("", style: style),
-          margin: EdgeInsets.only(bottom: 20),
+        StreamBuilder(
+          stream: _bloc.currentPercentage,
+          builder: (BuildContext context, AsyncSnapshot<int> percentage) {
+            if (_bloc.isCounting && (percentage.hasData))
+              return Text("${percentage.data}% men", style: style);
+            return Text("", style: style);
+          },
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

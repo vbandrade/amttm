@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 
 class TimeCounterBloc with ChangeNotifier {
   final Map<String, Stopwatch> timerTable;
-  int percentage = 100;
   bool isCounting = false;
   bool isStopped = true;
-  Timer _timer;
+  Stream<int> currentPercentage;
 
   TimeCounterBloc(List<String> labels)
       : timerTable = labels.fold<Map<String, Stopwatch>>(
             Map<String, Stopwatch>(), _combineToMap) {
-    _timer = Timer.periodic(Duration(milliseconds: 100), _refreshTimerCallback);
+    currentPercentage = Stream<int>.periodic(
+        Duration(milliseconds: 100), (x) => _calculatePercentage());
   }
 
   static Map<String, Stopwatch> _combineToMap(
@@ -20,11 +20,8 @@ class TimeCounterBloc with ChangeNotifier {
     return previousValue;
   }
 
-  void _refreshTimerCallback(Timer timer) {
-    _calculatePercentage();
-  }
-
-  void _calculatePercentage() {
+  int _calculatePercentage() {
+    int percentage = 100;
     final menSW = timerTable["a dude"];
     final notMenSW = timerTable["not a dude"];
     if (!isStopped) isCounting = notMenSW.isRunning || menSW.isRunning;
@@ -37,24 +34,28 @@ class TimeCounterBloc with ChangeNotifier {
     } else {
       percentage = 100;
     }
+
     notifyListeners();
+    return percentage;
   }
 
   void start(String label) {
     timerTable.forEach((String s, Stopwatch sw) {
       sw.stop();
     });
+
     timerTable[label].start();
     isStopped = false;
-    _calculatePercentage();
+    notifyListeners();
   }
 
   void stop() {
     timerTable.forEach((String s, Stopwatch sw) {
       sw.stop();
     });
+
     isStopped = true;
-    _calculatePercentage();
+    notifyListeners();
   }
 
   void reset() {
@@ -62,14 +63,9 @@ class TimeCounterBloc with ChangeNotifier {
       sw.stop();
       sw.reset();
     });
+
     isCounting = false;
     isStopped = true;
-    percentage = 100;
-    _calculatePercentage();
-  }
-
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
+    notifyListeners();
   }
 }
