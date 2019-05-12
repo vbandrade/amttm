@@ -6,9 +6,23 @@ import 'package:amttm/app/time_counter_panel.dart';
 
 class Home extends StatelessWidget {
   final labels = ["a dude", "not a dude"];
+
   @override
   Widget build(BuildContext context) {
-    final style = TextStyle(fontSize: 24);
+    var bottomText = RichText(
+      textAlign: TextAlign.center,
+      text: TextSpan(
+        style: TextStyle(color: Colors.deepOrangeAccent[200]),
+        children: <TextSpan>[
+          TextSpan(
+            text: 'inspired by\n',
+            style: TextStyle(fontStyle: FontStyle.italic),
+          ),
+          TextSpan(text: 'http://arementalkingtoomuch.com'),
+        ],
+      ),
+    );
+
     return ChangeNotifierProvider<TimeCounterBloc>(
       builder: (_) => TimeCounterBloc(labels),
       child: Scaffold(
@@ -21,16 +35,13 @@ class Home extends StatelessWidget {
           children: <Widget>[
             Text(
               "who's talking?",
-              style: style,
+              style: TextStyle(fontSize: 24),
             ),
             TimeCounterPanel(labels),
             FlatButton(
-              child: Text(
-                "inspired by:\nhttp://arementalkingtoomuch.com",
-                style: TextStyle(color: Colors.deepOrangeAccent[200]),
-              ),
+              child: bottomText,
               onPressed: _launchURL,
-            )
+            ),
           ],
         ),
       ),
