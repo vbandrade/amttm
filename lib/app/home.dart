@@ -1,7 +1,7 @@
-import 'package:amttm/app/time_counter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:amttm/app/time_counter_bloc.dart';
 import 'package:amttm/app/time_counter_panel.dart';
 
 class Home extends StatelessWidget {
