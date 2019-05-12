@@ -25,7 +25,10 @@ class Home extends StatelessWidget {
             ),
             TimeCounterPanel(labels),
             FlatButton(
-              child: Text("inspired by:\nhttp://arementalkingtoomuch.com"),
+              child: Text(
+                "inspired by:\nhttp://arementalkingtoomuch.com",
+                style: TextStyle(color: Colors.deepOrangeAccent[200]),
+              ),
               onPressed: _launchURL,
             )
           ],
