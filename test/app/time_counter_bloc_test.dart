@@ -10,6 +10,20 @@ void main() {
       expect(bloc.isStopped, false);
       expect(bloc.isCounting, true);
     });
+    test('When starting a second stopwatch, the first must be stopped', () {
+      final bloc = TimeCounterBloc();
+      bloc.start(Timers.aDude);
+
+      expect(bloc.timerTable[Timers.aDude].isRunning, true);
+      expect(bloc.timerTable[Timers.notADude].isRunning, false);
+
+      bloc.start(Timers.notADude);
+      expect(bloc.timerTable[Timers.aDude].isRunning, false);
+      expect(bloc.timerTable[Timers.notADude].isRunning, true);
+
+      expect(bloc.isStopped, false);
+      expect(bloc.isCounting, true);
+    });
     test('Stop should stop all stopwatches ', () {
       final bloc = TimeCounterBloc();
       bloc.start(Timers.aDude);
