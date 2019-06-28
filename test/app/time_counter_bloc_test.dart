@@ -3,14 +3,15 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group("Test TimeCounterBloc", () {
-    test('Start will start the respective stopwatch', () {
+    test('Start starts the respective stopwatch', () {
       final bloc = TimeCounterBloc();
       bloc.start(Timers.aDude);
 
       expect(bloc.allTimersAreStopped, false);
       expect(bloc.isMeetingRunning, true);
+      expect(bloc.timerTable[Timers.aDude].isRunning, true);
     });
-    test('When starting a second stopwatch, the first must be stopped', () {
+    test('When starting a second stopwatch, the first is stopped', () {
       final bloc = TimeCounterBloc();
       bloc.start(Timers.aDude);
 
@@ -24,7 +25,7 @@ void main() {
       expect(bloc.allTimersAreStopped, false);
       expect(bloc.isMeetingRunning, true);
     });
-    test('Stop should stop all stopwatches ', () {
+    test('Stop stop all stopwatches', () {
       final bloc = TimeCounterBloc();
       bloc.start(Timers.aDude);
       bloc.stop();
