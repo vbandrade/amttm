@@ -1,14 +1,17 @@
+import 'package:amttm/app/time_counter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-typedef OnPressedCallback = void Function(String label);
+typedef OnPressedCallback = void Function(Timers timer);
 
 class TimeCounter extends StatelessWidget {
+  final Timers timer;
   final String _label;
   final Stopwatch _stopwatch;
   final OnPressedCallback _onPressed;
 
-  const TimeCounter(this._label, this._stopwatch, this._onPressed);
+  const TimeCounter(this.timer, this._stopwatch, this._onPressed)
+      : this._label = timer == Timers.aDude ? "A Dude" : "Not a Dude";
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +23,7 @@ class TimeCounter extends StatelessWidget {
       children: <Widget>[
         RaisedButton(
           child: Text(_label),
-          onPressed: (!_stopwatch.isRunning) ? () => _onPressed(_label) : null,
+          onPressed: (!_stopwatch.isRunning) ? () => _onPressed(timer) : null,
         ),
         Text("${formater.format(minutes)}:${formater.format(seconds)}"),
       ],

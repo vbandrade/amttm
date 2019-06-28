@@ -5,7 +5,7 @@ import 'package:amttm/app/time_counter_bloc.dart';
 import 'package:amttm/app/time_counter_panel.dart';
 
 class Home extends StatelessWidget {
-  final labels = ["a dude", "not a dude"];
+  final labels = [Timers.aDude, Timers.notADude];
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class Home extends StatelessWidget {
     );
 
     return ChangeNotifierProvider<TimeCounterBloc>(
-      builder: (_) => TimeCounterBloc(labels),
+      builder: (_) => TimeCounterBloc(),
       child: Scaffold(
         appBar: AppBar(
           title: Text('🤐 are men talking too much?'),

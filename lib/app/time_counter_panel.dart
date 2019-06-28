@@ -4,14 +4,14 @@ import 'package:amttm/app/time_counter.dart';
 import 'package:amttm/app/time_counter_bloc.dart';
 
 class TimeCounterPanel extends StatelessWidget {
-  final List<String> _labels;
+  final List<Timers> _timers;
 
-  TimeCounterPanel(this._labels);
+  TimeCounterPanel(this._timers);
 
   @override
   Widget build(BuildContext context) {
     TimeCounterBloc _bloc = Provider.of<TimeCounterBloc>(context);
-    List<TimeCounter> timers = _labels
+    List<TimeCounter> timers = _timers
         .map((label) => TimeCounter(
               label,
               _bloc.timerTable[label],

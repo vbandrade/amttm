@@ -1,29 +1,26 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
+enum Timers { aDude, notADude }
+
 class TimeCounterBloc with ChangeNotifier {
-  final Map<String, Stopwatch> timerTable;
+  final timerTable = Map<Timers, Stopwatch>();
   bool isCounting = false;
   bool isStopped = true;
   Stream<int> currentPercentage;
 
-  TimeCounterBloc(List<String> labels)
-      : timerTable = labels.fold<Map<String, Stopwatch>>(
-            Map<String, Stopwatch>(), _combineToMap) {
+  TimeCounterBloc() {
+    timerTable[Timers.aDude] = Stopwatch();
+    timerTable[Timers.notADude] = Stopwatch();
+
     currentPercentage = Stream<int>.periodic(
         Duration(milliseconds: 100), (x) => _calculatePercentage());
   }
 
-  static Map<String, Stopwatch> _combineToMap(
-      Map<String, Stopwatch> previousValue, String element) {
-    previousValue[element] = Stopwatch();
-    return previousValue;
-  }
-
   int _calculatePercentage() {
     int percentage = 100;
-    final menSW = timerTable["a dude"];
-    final notMenSW = timerTable["not a dude"];
+    final menSW = timerTable[Timers.aDude];
+    final notMenSW = timerTable[Timers.notADude];
     if (!isStopped) isCounting = notMenSW.isRunning || menSW.isRunning;
     if (isCounting) {
       percentage = ((menSW.elapsedMilliseconds /
@@ -39,18 +36,18 @@ class TimeCounterBloc with ChangeNotifier {
     return percentage;
   }
 
-  void start(String label) {
-    timerTable.forEach((String s, Stopwatch sw) {
+  void start(Timers timer) {
+    timerTable.forEach((Timers s, Stopwatch sw) {
       sw.stop();
     });
 
-    timerTable[label].start();
+    timerTable[timer].start();
     isStopped = false;
     notifyListeners();
   }
 
   void stop() {
-    timerTable.forEach((String s, Stopwatch sw) {
+    timerTable.forEach((Timers s, Stopwatch sw) {
       sw.stop();
     });
 
@@ -59,7 +56,7 @@ class TimeCounterBloc with ChangeNotifier {
   }
 
   void reset() {
-    timerTable.forEach((String s, Stopwatch sw) {
+    timerTable.forEach((Timers s, Stopwatch sw) {
       sw.stop();
       sw.reset();
     });
