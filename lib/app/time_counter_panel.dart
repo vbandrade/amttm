@@ -26,7 +26,7 @@ class TimeCounterPanel extends StatelessWidget {
         StreamBuilder(
           stream: _bloc.currentPercentage,
           builder: (BuildContext context, AsyncSnapshot<int> percentage) {
-            if (_bloc.isCounting && (percentage.hasData))
+            if (_bloc.isMeetingRunning && (percentage.hasData))
               return Text("${percentage.data}% men", style: style);
             return Text("", style: style);
           },
@@ -38,12 +38,12 @@ class TimeCounterPanel extends StatelessWidget {
         FlatButton.icon(
           icon: Icon(Icons.stop),
           label: Text("stop"),
-          onPressed: _bloc.isCounting && !_bloc.isStopped ? _bloc.stop : null,
+          onPressed: _bloc.isMeetingRunning && !_bloc.allTimersAreStopped ? _bloc.stop : null,
         ),
         FlatButton.icon(
           icon: Icon(Icons.refresh),
           label: Text("reset"),
-          onPressed: _bloc.isCounting ? _bloc.reset : null,
+          onPressed: _bloc.isMeetingRunning ? _bloc.reset : null,
         )
       ],
     );

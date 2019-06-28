@@ -7,8 +7,8 @@ void main() {
       final bloc = TimeCounterBloc();
       bloc.start(Timers.aDude);
 
-      expect(bloc.isStopped, false);
-      expect(bloc.isCounting, true);
+      expect(bloc.allTimersAreStopped, false);
+      expect(bloc.isMeetingRunning, true);
     });
     test('When starting a second stopwatch, the first must be stopped', () {
       final bloc = TimeCounterBloc();
@@ -21,15 +21,24 @@ void main() {
       expect(bloc.timerTable[Timers.aDude].isRunning, false);
       expect(bloc.timerTable[Timers.notADude].isRunning, true);
 
-      expect(bloc.isStopped, false);
-      expect(bloc.isCounting, true);
+      expect(bloc.allTimersAreStopped, false);
+      expect(bloc.isMeetingRunning, true);
     });
     test('Stop should stop all stopwatches ', () {
       final bloc = TimeCounterBloc();
       bloc.start(Timers.aDude);
       bloc.stop();
-      expect(bloc.isStopped, true);
-      expect(bloc.isCounting, true);
+      expect(bloc.allTimersAreStopped, true);
+      expect(bloc.isMeetingRunning, true);
+    });
+    test('Reset stops all stopwatches and ends session', () {
+      final bloc = TimeCounterBloc();
+      bloc.start(Timers.aDude);
+      bloc.reset();
+      expect(bloc.timerTable[Timers.aDude].isRunning, false);
+      expect(bloc.timerTable[Timers.notADude].isRunning, false);
+      expect(bloc.allTimersAreStopped, true);
+      expect(bloc.isMeetingRunning, false);
     });
   });
 }

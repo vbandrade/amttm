@@ -6,9 +6,10 @@ enum Timers { aDude, notADude }
 class TimeCounterBloc with ChangeNotifier {
   final timerTable = Map<Timers, Stopwatch>();
   //the current session is running, and reset hasnt been pressed
-  bool isCounting = false;
+  bool isMeetingRunning = false;
+
   //determines if both timers are stopped
-  bool isStopped = true;
+  bool allTimersAreStopped = true;
   Stream<int> currentPercentage;
 
   TimeCounterBloc() {
@@ -24,7 +25,7 @@ class TimeCounterBloc with ChangeNotifier {
     final menSW = timerTable[Timers.aDude];
     final notMenSW = timerTable[Timers.notADude];
 
-    if (isCounting) {
+    if (isMeetingRunning) {
       percentage = ((menSW.elapsedMilliseconds /
                   (menSW.elapsedMilliseconds + notMenSW.elapsedMilliseconds)) *
               100)
@@ -43,8 +44,8 @@ class TimeCounterBloc with ChangeNotifier {
       sw.stop();
     });
     timerTable[timer].start();
-    isStopped = false;
-    isCounting = true;
+    allTimersAreStopped = false;
+    isMeetingRunning = true;
 
     notifyListeners();
   }
@@ -53,8 +54,8 @@ class TimeCounterBloc with ChangeNotifier {
     timerTable.forEach((Timers s, Stopwatch sw) {
       sw.stop();
     });
-    isStopped = true;
-    isCounting = true;
+    allTimersAreStopped = true;
+    isMeetingRunning = true;
 
     notifyListeners();
   }
@@ -64,8 +65,8 @@ class TimeCounterBloc with ChangeNotifier {
       sw.stop();
       sw.reset();
     });
-    isCounting = false;
-    isStopped = true;
+    isMeetingRunning = false;
+    allTimersAreStopped = true;
 
     notifyListeners();
   }
