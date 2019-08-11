@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:amttm/app/time_counter.dart';
 import 'package:amttm/app/time_counter_bloc.dart';
 
 class TimeCounterPanel extends StatelessWidget {
   final List<Timers> _timers;
+  final TimeCounterBloc _bloc;
 
-  TimeCounterPanel(this._timers);
+  TimeCounterPanel(this._timers, this._bloc);
 
   @override
   Widget build(BuildContext context) {
-    TimeCounterBloc _bloc = Provider.of<TimeCounterBloc>(context);
+
     List<TimeCounter> timers = _timers
         .map((label) => TimeCounter(
               label,
@@ -38,7 +38,9 @@ class TimeCounterPanel extends StatelessWidget {
         FlatButton.icon(
           icon: Icon(Icons.stop),
           label: Text("stop"),
-          onPressed: _bloc.isMeetingRunning && !_bloc.allTimersAreStopped ? _bloc.stop : null,
+          onPressed: _bloc.isMeetingRunning && !_bloc.allTimersAreStopped
+              ? _bloc.stop
+              : null,
         ),
         FlatButton.icon(
           icon: Icon(Icons.refresh),

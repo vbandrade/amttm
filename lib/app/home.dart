@@ -9,6 +9,8 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TimeCounterBloc _bloc = Provider.of<TimeCounterBloc>(context);
+
     var bottomText = RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
@@ -23,27 +25,24 @@ class Home extends StatelessWidget {
       ),
     );
 
-    return ChangeNotifierProvider<TimeCounterBloc>(
-      builder: (_) => TimeCounterBloc(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('🤐 are men talking too much?'),
-          backgroundColor: Colors.deepOrange[200],
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Text(
-              "who's talking?",
-              style: TextStyle(fontSize: 24),
-            ),
-            TimeCounterPanel(labels),
-            FlatButton(
-              child: bottomText,
-              onPressed: _launchURL,
-            ),
-          ],
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('🤐 are men talking too much?'),
+        backgroundColor: Colors.deepOrange[200],
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Text(
+            "who's talking?",
+            style: TextStyle(fontSize: 24),
+          ),
+          TimeCounterPanel(labels, _bloc),
+          FlatButton(
+            child: bottomText,
+            onPressed: _launchURL,
+          ),
+        ],
       ),
     );
   }
